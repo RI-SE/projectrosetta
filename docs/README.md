@@ -1,48 +1,64 @@
-This folder contains the Developer documentation. Developer documentation is meant to describe every aspect of your software of how developers should interface with a given software service or library. When we read documentation, we are learning how the application works or how to use the software's "API".
+# Project Rosetta Documentation
 
-Arrange your documentation with different sections and depending on the situation, you can optimize your approach to create the docs. These sections can be,
+Welcome to the Project Rosetta documentation.
 
-- Getting a general overview
-- Learning how to get started
-- Language-specific guides
-- System architecture
-- Application Infrastructure architecture
-- API references
-- Understand complex syntax definitions
+Project Rosetta is an open-source initiative focused on improving scenario correlation between simulation and test-track execution in ADAS verification and validation workflows. The project provides tooling to make simulation and proving-ground scenarios comparable, measurable, and reproducible.
 
-Repo structure under the docs folder can be matched to the sections described above. Navigation can be effectively arranged by creating the folder structure and Markdown files in it as per topic.  However, regardless of the structure of the repository, during publishing the navigation of the pages can be specified in the YAML file which will be used for publishing.
+## Purpose
 
-    /getting-started
+In modern ADAS programs, simulation and physical test-track execution both play critical roles in development, rating, and certification. A recurring challenge is establishing reliable correlation between these two environments.
 
-    /getting-started/README.md
+Project Rosetta addresses this challenge by defining open, interoperable workflows for scenario transformation and correlation analysis.
 
-    /getting-started/introduction.md
+## Scope
 
-    /faq
+Project Rosetta is centered around three core capabilities:
 
-    /faq/faq.md
+1. **Scenario to Test Track**  
+    Generate robot-executable test-track artifacts from ASAM OpenSCENARIO and OpenDRIVE inputs.
 
-    /api-references
+2. **Test Track Ground Truth to Scenario**  
+    Reconstruct OpenSCENARIO and/or OpenDRIVE representations from measured test-track ground-truth data.
 
-    /api-references/introduction.md
+3. **Scenario Correlation**  
+    Define and compute metrics that quantify correlation between simulated trajectories and test-track trajectories at scenario level.
 
-    /how-to/
+## Business and Engineering Rationale
 
-    /how-to/update.md
+Project Rosetta is designed to support:
 
-The key to effectively navigating documentation is knowing how good documentation is organized. Developers would love the docs published if they get some of the below information from the developer documentation.
+- Better traceability between simulation evidence and track evidence
+- More efficient validation workflows for rating and certification use cases
+- Shared implementation effort across partners facing the same technical problem
+- Open standards adoption and interoperability in the toolchain
 
-- Class Reference: A comprehensive listing of API functionality.
-- Changelog: A reference of what changes in each API version.
-- Code Samples: A set of examples showing typical API usage.
-- Code Playground: An interactive explorer for trying the API live in the browser.
-- Developers Guide: A conversationally written guide to using the API.
-- Articles: Tutorials and screencasts discussing different ways of using the API.
+## Project Principles
 
-The main features of the documentation can also be
+- **Open standards first**: use and extend industry standards such as ASAM OpenSCENARIO and OpenDRIVE.
+- **Reproducibility**: produce deterministic and reviewable scenario transformations.
+- **Collaboration**: enable contributions from OEMs, tool vendors, research organizations, and the open-source community.
+- **Measurability**: provide explicit metrics for scenario-level correlation, not only qualitative assessment.
 
-- Open source-style documentation
-- Interactive documentation
-- A Developer blog
+## Documentation Map
 
-Not all documentation includes all of these things, but you can use the above list to get yourself oriented and to evaluate the quality of the documentation you're referencing.
+- [Getting Started](getting-started/README.md): onboarding, setup, and first contribution flow.
+- [FAQ](faq/faq.md): frequently asked questions about project use and contribution.
+
+Additional technical content (architecture, data model, interfaces, and metric definitions) will be expanded in this documentation space as the project evolves.
+
+## Intended Audience
+
+This documentation is intended for:
+
+- ADAS simulation and V&V engineers
+- Test-track automation and robotics engineers
+- Toolchain and data pipeline developers
+- Researchers and partners contributing scenario conversion and correlation methods
+
+## License
+
+Project Rosetta is licensed under **MPL 2.0**.
+
+## Contributing
+
+To contribute, please follow the repository contribution policy in [CONTRIBUTING.md](../CONTRIBUTING.md).
