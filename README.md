@@ -1,63 +1,74 @@
-# Reference repository for Open Source Software (OSS) projects
+# Project Rosetta
 
-## The Repository
+An open-source initiative for bridging simulation and test-track execution in ADAS verification and validation.
 
-This repository serves as a base reference to assist users and teams in setting up a new repository, which can be selected while creating a new repository, with the directory structure, branches and files same as here for any open-source software (OSS) project created in Volvo Cars.
+Project Rosetta provides tooling and workflows to make scenario generation, reconstruction, and correlation **comparable, measurable, and reproducible** across toolchains and organizations.
 
-> ⚠ _Any code that Volvo Cars does not own the copyright or has not received under Volvo's Contributor License Agreement (CLA) must be placed in a `third_party` directory at the root of the project._
+## The Problem
 
-Get the project owner involved right from the beginning of the project until making the repo visibility to `public`.
+In ADAS development, both simulation and test-track execution are critical for V&V, certification (EuroNCAP, DCAS, ALKS), and rating. However, proving that the same scenario behaves consistently across these two environments is challenging—especially when data comes from different formats, tools, and measurement systems.
 
-For more information on how to release Volvo Cars code as open source, see [Open Source Software Contribution](https://intranet.volvocars.net/sites/OpenSourceSoftware/SitePages/OSS-Contribution.aspx).
+Project Rosetta solves this by standardizing workflows around open formats and explicit correlation metrics.
 
-## About this project
+## Core Capabilities
 
-_Here are some checklist worth considering to include more sections in this README file._
+**1. Scenario to Test Track**
+- Convert ASAM OpenSCENARIO and OpenDRIVE definitions into robot-executable test-track instructions
 
-- _Start with a one-line description that explains what the project is about, who might be interested in it, what language its written in, and how it might be different from similar projects._
-- _Include a list of features and limitations._
-- _State the goals and scope of the project to help set expectations and filter proposed changes down the line._
-- _Include the current status (e.g., proof of concept, used in production, active development, orphaned, etc.)_
-- _Include a description of the kind of environment required to run the software and instructions for setting it up._
-- _Clearly state the external dependencies and directions for installing them._
-- _Include a high-level development roadmap or link to open issues/milestones._
+**2. Test Track Ground Truth to Scenario**
+- Reconstruct comparable OpenSCENARIO and OpenDRIVE files from measured test-track ground-truth data
 
-## Pre-requisites
+**3. Scenario Correlation**
+- Compute scenario-level metrics to quantify correlation between simulated and measured trajectories
 
-_Add pre-requisites required for your open source project here._
+## Use Cases
 
-## Installation
+- **Rating & Certification**: Establish traceability between simulation evidence and track evidence for official rating bodies
+- **V&V Automation**: Reduce manual effort in scenario correlation analysis through automated metric computation
+- **Tool Interoperability**: Use open standards to reduce dependency on proprietary tool ecosystems
+- **Research & Collaboration**: Enable joint development across OEMs, partners, and the broader community
 
-_Provide instructions on how to install your open source project on different environments here._
+## Who This Is For
 
-## Documentation
+- ADAS simulation and V&V engineers
+- Test-track automation and robotics engineers
+- Toolchain and data pipeline architects
+- Researchers and integration partners
 
-See [Wiki](https://github.com/volvo-cars/open-source-software-template/wiki) for more details.
+## Quick Links
 
-## FAQ
+- **[Documentation](docs/)** — Start here for guides, architecture, and references
+- **[Getting Started](docs/getting-started/)** — Onboarding and setup
+- **[FAQ](docs/faq/faq.md)** — Common questions and clarifications
+- **[Contributing Guide](CONTRIBUTING.md)** — How to contribute (including CCB governance for `main`)
 
-_List top three or five most frequently asked questions of your open source project here._
+## Guiding Principles
 
-- _Q&A 1_
-- _Q&A 2_
-- _Q&A 3_
+- **Open Standards First**: Prioritize ASAM OpenSCENARIO and OpenDRIVE interoperability
+- **Reproducibility**: Ensure deterministic, reviewable transformations
+- **Measurability**: Define explicit, scenario-level correlation metrics
+- **Collaboration**: Enable contributions from OEMs, tool vendors, research organizations, and the community
 
-_More questions can be linked to a dedicated FAQ page as given below._
+## Project Status
 
-See [FAQ](docs/faq/faq.md) for more questions.
+Early active development. Architecture and core interfaces are under active design and refinement.
 
 ## Support
 
-_Provide details on how and whom to contact for any support related queries for this project here._
+For questions, bug reports, feature requests, or general support, please **open an issue** on the [GitHub issue tracker](https://github.com/volvo-cars/projectrosetta/issues).
 
-## Contributing
+When opening an issue, provide:
+- A clear title and description
+- Steps to reproduce (for bugs)
+- Expected vs. actual behavior
+- Environment details (OS, tool versions, etc.) when relevant
 
-See the [contributing guide](CONTRIBUTING.md) for detailed instructions on how to get started with this project.
-
-## Code of Conduct
-
-This project adheres to the [Code of Conduct](./.github/CODE_OF_CONDUCT.md). By participating, you are expected to honor this code.
+Issues enable transparent discussion and help the team prioritize work based on community needs.
 
 ## License
 
-This repository is licensed under [Mozilla Public License 2.0](LICENSE) © [YYYY] Volvo Car Corporation.
+This project is licensed under **Mozilla Public License 2.0** © Volvo Car Corporation.
+
+## Code of Conduct
+
+This project adheres to the [Contributor Covenant Code of Conduct](./.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold it. Please report unacceptable behavior to [opensource@volvocars.com](mailto:opensource@volvocars.com).
