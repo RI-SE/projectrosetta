@@ -67,7 +67,7 @@ Issues enable transparent discussion and help the team prioritize work based on 
 
 ## License
 
-This project is licensed under **Mozilla Public License 2.0** © Volvo Car Corporation.
+This project is licensed under **Mozilla Public License 2.0**.
 
 ## Code of Conduct
 
