@@ -1,24 +1,56 @@
-# Contributing to Open Source Software Project
+# Contributing to Project Rosetta
 
-Thanks for taking the time to contribute!
+Thank you for your interest in contributing to Project Rosetta.
 
-This project adheres to the Contributor Covenant [code of conduct](.github/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to opensource@volvocars.com.
+This document defines the contribution workflow for this repository and the governance controls that apply to changes targeting the `main` branch.
 
-The following is a set of guidelines for contributing to this open source project. These are just guidelines, not rules, use your best judgment and feel free to propose changes to this document in a pull request.
+## Code of Conduct
 
-## Issues
+This project follows the Contributor Covenant [Code of Conduct](.github/CODE_OF_CONDUCT.md). By participating, you agree to follow it.
 
-Issues can be created [here](https://github.com/volvo-cars/open-source-software-template/issues/new).
+## Contribution Workflow
 
-_Provide details on how users can create or report issues for this project here._
+All changes must be delivered through pull requests (PRs).
 
-## Pull Requests
+### 1. Open an Issue (Recommended)
 
-A [pull request](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) is a way to suggest changes to this repository.
+Before implementing larger changes, open an issue to describe the problem, expected behavior, and proposed approach.
 
-_Provide details on how users can raise a pull request to this project here._
+### 2. Create a Branch
 
-## Resources
+Create a feature or fix branch from the latest `main`.
 
-- [How to contribute to open source](https://opensource.guide/how-to-contribute/)
-- [Using pull requests](https://help.github.com/articles/about-pull-requests/)
+### 3. Submit a Pull Request
+
+Open a PR to `main` that includes:
+
+- A clear title and concise summary
+- Rationale for the change
+- Linked issue (when applicable)
+- Documentation updates when behavior or usage changes
+
+### 4. Address Review Feedback
+
+Update the PR as needed and resolve all review comments before merge.
+
+## Branch Governance for `main`
+
+The `main` branch is protected and governed by the Change Control Board (CCB).
+
+- Only members of the CCB are authorized to merge PRs into `main`.
+- Every PR targeting `main` requires **at least one (1) approval from the CCB** before it can be merged.
+
+These requirements apply to all contributors and are enforced through repository branch protection settings.
+
+## Quality Expectations
+
+Contributors are expected to:
+
+- Keep changes focused and scoped
+- Follow existing project structure and conventions
+- Ensure documentation remains accurate
+- Verify that proposed changes are review-ready
+
+## Questions
+
+If you are unsure how to proceed with a contribution, open an issue and request guidance from maintainers.
