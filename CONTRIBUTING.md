@@ -51,6 +51,28 @@ Contributors are expected to:
 - Ensure documentation remains accurate
 - Verify that proposed changes are review-ready
 
+## Local Quality Checks
+
+Before opening a PR, run the same checks that are enforced in CI:
+
+- `ruff format --check .`
+- `ruff check .`
+- `npx markdownlint-cli2 "**/*.md"`
+
+If needed, install the required tools locally:
+
+- `pip install ruff`
+
+For Markdown linting, `markdownlint-cli2` requires **Node.js 20+**.
+
+- Verify Node version: `node --version`
+- If your Node version is below 20, upgrade Node.js and rerun:
+  - `npx markdownlint-cli2 "**/*.md"`
+
+If you cannot upgrade Node.js locally yet, run the Python checks locally and rely on CI for Markdown linting.
+
+Running these checks before submitting a PR reduces review cycle time and helps keep contributions consistent with repository standards.
+
 ## Questions
 
 If you are unsure how to proceed with a contribution, open an issue and request guidance from maintainers.

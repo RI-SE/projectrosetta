@@ -1,0 +1,50 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint]
+preview = true
+explicit-preview-rules = true
+select = [
+  "PL", # pylint
+  "F",  # pyflakes
+  "E",  # pycodestyle
+  "D",  # pydocstyle
+  "I",  # isort
+]
+extend-select = [
+  "DOC201", # docstring-missing-returns
+  "DOC202", # docstring-extraneous-returns
+  "DOC402", # docstring-missing-yields
+  "DOC403", # docstring-extraneous-yields
+  "DOC501", # docstring-missing-exception
+  "DOC502", # docstring-extraneous-exception
+]
+ignore = [
+  "PLR0912", # too-many-branches
+  "PLR0913", # too-many-arguments
+  "PLR0915", # too-many-statements
+  "PLC0415", # import-outside-top-level
+  "PLR0911", # too-many-return-statements
+  "PLR2004", # magic-value-comparison
+  "D100", # undocumented-public-module
+  "D107", # undocumented-public-init
+  "D205", # missing-blank-line-after-summary
+  "D400", # missing-trailing-period
+  "D401", # non-imperative-mood
+  "D403", # first-word-uncapitalized
+  "D415", # missing-terminal-punctuation
+  "D203", # one-blank-line-before-class (conflicts with D211)
+  "D212", # multi-line-summary-first-line (conflicts with D213)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"docs/**" = ["DOC"]
+".github/**" = ["DOC"]
+"src/application/**" = ["DOC"]

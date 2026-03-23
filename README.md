@@ -12,14 +12,20 @@ Project Rosetta solves this by standardizing workflows around open formats and e
 
 ## Core Capabilities
 
-**1. Scenario to Test Track**
-- Convert ASAM OpenSCENARIO and OpenDRIVE definitions into robot-executable test-track instructions
+1. **Scenario to Test Track**
 
-**2. Test Track Ground Truth to Scenario**
-- Reconstruct comparable OpenSCENARIO and OpenDRIVE files from measured test-track ground-truth data
+   - Convert ASAM OpenSCENARIO and OpenDRIVE definitions into robot-executable
+     test-track instructions
 
-**3. Scenario Correlation**
-- Compute scenario-level metrics to quantify correlation between simulated and measured trajectories
+2. **Test Track Ground Truth to Scenario**
+
+   - Reconstruct comparable OpenSCENARIO and OpenDRIVE files from measured
+     test-track ground-truth data
+
+3. **Scenario Correlation**
+
+   - Compute scenario-level metrics to quantify correlation between simulated
+     and measured trajectories
 
 ## Use Cases
 
@@ -42,6 +48,12 @@ Project Rosetta solves this by standardizing workflows around open formats and e
 - **[FAQ](docs/faq/faq.md)** — Common questions and clarifications
 - **[Contributing Guide](CONTRIBUTING.md)** — How to contribute (including CCB governance for `main`)
 
+## Contributor Quick Start
+
+Before opening a pull request, run local quality checks as described in the [Local Quality Checks](CONTRIBUTING.md#local-quality-checks) section.
+
+This ensures your contribution is aligned with repository linting and formatting standards before CI runs.
+
 ## Guiding Principles
 
 - **Open Standards First**: Prioritize ASAM OpenSCENARIO and OpenDRIVE interoperability
@@ -58,6 +70,7 @@ Early active development. Architecture and core interfaces are under active desi
 For questions, bug reports, feature requests, or general support, please **open an issue** on the [GitHub issue tracker](https://github.com/volvo-cars/projectrosetta/issues).
 
 When opening an issue, provide:
+
 - A clear title and description
 - Steps to reproduce (for bugs)
 - Expected vs. actual behavior
