@@ -21,6 +21,7 @@ pandas = "^2.2.3"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
 ruff = "^0.11.2"
+pytest = "^8.3.5"
 
 [tool.poetry.scripts]
 rosetta-hello = "project_rosetta.cli.hello:main"
@@ -77,3 +78,8 @@ ignore = [
 "docs/**" = ["DOC"]
 ".github/**" = ["DOC"]
 "src/application/**" = ["DOC"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
