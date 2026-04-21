@@ -15,6 +15,8 @@ packages = [{ include = "project_rosetta", from = "src", format = ["sdist", "whe
 python = ">=3.10,<4.0"
 numpy = "^2.2.0"
 scenariogeneration = "^0.16.4"
+requests = "^2.33.1"
+pandas = "^2.2.3"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
@@ -22,6 +24,8 @@ ruff = "^0.11.2"
 
 [tool.poetry.scripts]
 rosetta-hello = "project_rosetta.cli.hello:main"
+esmini-setup = "project_rosetta.cli.esmini_setup:main"
+run-scenario2xyt = "project_rosetta.cli.scenario2xyt:main"
 
 [tool.ruff]
 line-length = 100

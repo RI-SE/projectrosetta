@@ -72,6 +72,18 @@ Run all checks locally:
 
 - `poetry run pre-commit run --all-files`
 
+## Scenario to .xyt
+
+Start with getting esmini demo version
+
+- `poetry run esmini-setup`
+
+Now you can generate .xyt files from .xosc with
+
+- `poetry run run-scenatio2xyt <path_to_scenario_xosc>`
+
+This will generate one .xyt file for each entity in the scenario. All relevant information will be stored in a logs folder.
+
 ## Guiding Principles
 
 - **Open Standards First**: Prioritize ASAM OpenSCENARIO and OpenDRIVE interoperability
