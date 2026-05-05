@@ -2,34 +2,45 @@ import importlib.util
 import sys
 from pathlib import Path
 
-from project_rosetta.utils.paths import BASE_DIR
+from project_rosetta.utils.utils import BASE_DIR
 
 
-def py2xosc(py_file: str) -> list[str]:
+def py2xosc(py_file: str | Path) -> list[Path]:
     """
-    Generate an OpenSCENARIO file from a Python scenario definition.
+    py2xosc
+    Converts a Python scenario definition file into OpenSCENARIO files.
+    The Python file must define a class named `Scenario` with a method `generate(self, path)`
+    that returns a tuple of (scenarios, roads), where `scenarios` is a list of OpenSCENARIO file
 
     Args:
-        py_file: Path to the Python scenario file.
+        py_file (str | Path): The path to the Python file containing the scenario definition.
 
     Returns:
-        A list of strings representing the lines of the generated OpenSCENARIO file.
+        list[Path]: A list of paths to the generated OpenSCENARIO files.
+
+    Raises:
+        ImportError: If the module cannot be loaded from the specified file.
 
     """
-    module_name = "my_dynamic_module"
+    py_file = Path(py_file)
+    module_name = py_file.stem  # ✅ important fix
 
     spec = importlib.util.spec_from_file_location(module_name, py_file)
     module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
+
+    sys.modules[module_name] = module  # must match actual module name
+
+    if spec.loader is None:
+        raise ImportError(f"Could not load module from {py_file}")
+
     spec.loader.exec_module(module)
 
-    # Now access your class
     Scenario = getattr(module, "Scenario")
 
-    # Use it
     obj = Scenario()
     obj.naming = "numerical"
 
-    scenarios, roads = obj.generate(Path(py_file).parent)
+    scenarios, _ = obj.generate(py_file.parent)
     scenarios = [Path(BASE_DIR, scenario) for scenario in scenarios]
+
     return scenarios

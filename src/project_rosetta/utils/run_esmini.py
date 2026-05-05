@@ -1,57 +1,22 @@
-import argparse
 import subprocess
-from datetime import datetime
 from pathlib import Path
 
-ESMINI_DEMO_DIR = Path("esmini/esmini-demo")
+from project_rosetta.utils.utils import ESMINI_DEMO_DIR, CommandResult
 
 
-def args(argv: list[str] | None = None) -> argparse.Namespace:
+def run_esmini(
+    config_file: Path | str,
+    cwd: Path | str = ESMINI_DEMO_DIR,
+) -> CommandResult:
     """
-    Parse CLI arguments for running esmini.
+    Run the esmini process with the given config file.
 
     Args:
-        argv: Optional list of command-line arguments. If None, defaults to sys.argv.
+        config_file: Path to the esmini config file.
+        cwd: Current working directory for the esmini process.
 
     Returns:
-        An argparse.Namespace object containing the parsed arguments.
-
-    """
-    parser = argparse.ArgumentParser(description="Run an esmini scenario.")
-    parser.add_argument(
-        "--osc",
-        required=True,
-        help="Path to the OpenSCENARIO file, relative to the esmini demo directory.",
-    )
-    parser.add_argument(
-        "--record",
-        default=f"replay_{datetime.now().strftime('%Y%m%d_%H%M%S')}.dat",
-        help="Output path for the recorded replay file.",
-    )
-    parser.add_argument(
-        "--window",
-        nargs=4,
-        metavar=("X", "Y", "WIDTH", "HEIGHT"),
-        default=["60", "60", "800", "400"],
-        help="Window geometry as four integers: X Y WIDTH HEIGHT.",
-    )
-    parser.add_argument(
-        "esmini_args",
-        nargs=argparse.REMAINDER,
-        help="Additional arguments passed through to the esmini binary.",
-    )
-    return parser.parse_args(argv)
-
-
-def run_esmini(config_file: Path | str) -> int:
-    """
-    Run esmini with the specified configuration file.
-
-    Args:
-        config_file: Path to the esmini configuration file.
-
-    Returns:
-        Exit status code.
+        CommandResult: The result of the esmini process.
 
     """
     command = [
@@ -59,56 +24,75 @@ def run_esmini(config_file: Path | str) -> int:
         "--config_file_path",
         str(config_file),
     ]
+
     result = subprocess.run(
         command,
-        cwd=ESMINI_DEMO_DIR,
+        cwd=cwd,
         capture_output=True,
         text=True,
         check=False,
     )
 
-    if result.stdout:
-        print(result.stdout)
-    if result.stderr:
-        print(result.stderr)
+    return CommandResult(
+        returncode=result.returncode,
+        stdout=result.stdout,
+        stderr=result.stderr,
+    )
 
-    return result.returncode
+
+def build_esmini_config(
+    scenario_path: Path | str,
+    record_file: Path | str,
+    window: bool = False,
+) -> str:
+    """
+    Return config content as string.
+
+    Args:
+        scenario_path: Path to the scenario file.
+        record_file: Path to the record file (without .dat extension).
+        window: Whether to display the esmini window.
+
+    Returns:
+        Config content as string.
+
+    """
+    lines = [
+        "esmini:",
+        f"  osc: {scenario_path}",
+        f"  record: {record_file}.dat",
+    ]
+
+    if window:
+        lines.append("  window: 60 60 800 400")
+    else:
+        lines.append("  headless: true")
+
+    return "\n".join(lines) + "\n"
 
 
 def setup_run_config(
-    scenario_path: Path | str, record_file: Path | str, window: bool = False
+    scenario_path: Path | str,
+    record_file: Path | str,
+    window: bool = False,
+    output_path: Path | str = "esmini_run_config.yml",
 ) -> Path:
     """
-    Set up the esmini run configuration file.
+    Create a config file for running esmini and return the path to the created file.
 
     Args:
-        scenario_path: Path to the OpenSCENARIO file.
-        record_file: Path to the recorded replay file.
-        window: Whether to enable the windowed mode.
+        scenario_path: Path to the scenario file.
+        record_file: Path to the record file.
+        window: Whether to display the esmini window.
+        output_path: Path to the output config file.
 
     Returns:
-        Path to the generated configuration file.
+        Path to the created config file.
 
     """
-    config_path = "esmini_run_config.yml"
-    with open(config_path, "w") as f:
-        f.write("esmini:\n")
-        f.write(f"\tosc: {scenario_path}\n")
-        f.write(f"\trecord: {record_file}.dat\n")
-        if window:
-            f.write("\twindow: 60 60 800 400\n")
-        else:
-            f.write("\theadless: true\n")
+    content = build_esmini_config(scenario_path, record_file, window)
 
-    return Path(config_path)
+    output_path = Path(output_path)
+    output_path.write_text(content)
 
-
-def main(argv: list[str] | None = None) -> int:
-    """
-    Run the esmini CLI command.
-
-    Returns:
-        Exit status code.
-
-    """
-    return run_esmini(args(argv))
+    return output_path
