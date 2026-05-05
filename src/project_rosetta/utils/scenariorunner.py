@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Dict
 
 from project_rosetta.utils.csv2xyt import run_csv2xyt
-from project_rosetta.utils.paths import LOGS_DIR
 from project_rosetta.utils.run_dat2csv import run_dat2csv
 from project_rosetta.utils.run_esmini import run_esmini, setup_run_config
+from project_rosetta.utils.utils import LOGS_DIR
 from project_rosetta.utils.xosc_from_py import py2xosc
 
 XOSC_DIR_NAME = "xosc"
@@ -36,7 +36,7 @@ class ScenarioBatch:
 
     def run_all(self) -> None:
         """Run all scenarios in the batch."""
-        for runner in [self.runners[0]]:
+        for runner in self.runners:
             runner.setup()
             runner.run()
 

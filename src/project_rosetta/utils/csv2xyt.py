@@ -3,61 +3,55 @@ from pathlib import Path
 import pandas as pd
 
 
-def remove_spaces_from_csv(csv_file: str, output_file: str) -> None:
+def split_dataframe_by_id(df: pd.DataFrame, columns: list[str]) -> dict[str, pd.DataFrame]:
     """
-    Read a CSV file and remove all spaces from column names and values.
+    Split a dataframe into multiple dataframes by 'id'.
 
-    Args:
-        csv_file: Path to input CSV file
-        output_file: Path to save the cleaned CSV file
+    Returns:
+        Dict mapping id -> filtered dataframe
+
+    Raises:
+        ValueError: If input dataframe is None.
+        KeyError: If 'id' column is missing or if any requested columns are missing.
+        KeyError: If requested columns are missing from the dataframe.
 
     """
-    df = pd.read_csv(csv_file)
+    if df is None:
+        raise ValueError("Input dataframe cannot be None")
 
-    # Remove spaces from column names
-    df.columns = df.columns.str.replace(" ", "")
+    if "id" not in df.columns:
+        raise KeyError("Column 'id' not found in dataframe")
 
-    # Remove spaces from all string columns
-    for col in df.columns:
-        if df[col].dtype == "object":
-            df[col] = df[col].astype(str).str.replace(" ", "")
+    missing_cols = [col for col in columns if col not in df.columns]
+    if missing_cols:
+        raise KeyError(f"Missing columns: {missing_cols}")
 
-    df.to_csv(output_file, index=False)
-    print(f"Cleaned CSV saved to {output_file}")
+    result = {}
+
+    for id_val, group in df.groupby("id"):
+        result[str(id_val)] = group[columns]
+
+    return result
 
 
 def run_csv2xyt(csv_file: str, output_dir: str, columns: list[str]) -> None:
     """
-    Read a CSV file and generate separate CSV files for each id with specified columns.
+    Read CSV and write one file per id.
 
     Args:
-        csv_file: Path to input CSV file
-        output_dir: Directory to save output CSV files
-        columns: List of column names to extract (must include 'id')
+        csv_file: Path to the input CSV file.
+        output_dir: Directory where output .xyt files will be saved.
+        columns: List of columns to include in the output (must include 'id').
 
     """
-    # Read the CSV file
     df = pd.read_csv(csv_file)
-    df.columns = df.columns.str.strip()  # Remove leading/trailing spaces from column names
-    # Create output directory if it doesn't exist
-    Path(output_dir).mkdir(parents=True, exist_ok=True)
+    df.columns = df.columns.str.strip()
 
-    # Get unique ids
-    unique_ids = df["id"].unique()
+    split_data = split_dataframe_by_id(df, columns)
 
-    # Generate a file for each id
-    for id_val in unique_ids:
-        id_data = df[df["id"] == id_val][columns]
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
 
-        output_file = Path(output_dir) / f"id_{id_val}.xyt"
-        id_data.to_csv(output_file, index=False, header=False)
-        print(f"Created {output_file}")
-
-
-if __name__ == "__main__":
-    # Example usage
-    run_csv2xyt(
-        csv_file="esmini/esmini-demo/replay_20260413_145844.csv",
-        output_dir="output",
-        columns=["x", "y", "time"],
-    )
+    for id_val, data in split_data.items():
+        file_path = output_path / f"id_{id_val}.xyt"
+        data.to_csv(file_path, index=False, header=False)
