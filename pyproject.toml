@@ -15,13 +15,21 @@ packages = [{ include = "project_rosetta", from = "src", format = ["sdist", "whe
 python = ">=3.10,<4.0"
 numpy = "^2.2.0"
 scenariogeneration = "^0.16.4"
+requests = "^2.33.1"
+pandas = "^2.2.3"
+matplotlib = "^3.10.3"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.2.0"
 ruff = "^0.11.2"
+pytest = "^8.3.5"
 
 [tool.poetry.scripts]
 rosetta-hello = "project_rosetta.cli.hello:main"
+esmini-setup = "project_rosetta.cli.esmini_setup:main"
+run-scenario2xyt = "project_rosetta.cli.scenario2xyt:main"
+plot-path-metrics = "project_rosetta.cli.plot_path_metrics:main"
+plot-xyt-metrics = "project_rosetta.cli.plot_xyt_metrics:main"
 
 [tool.ruff]
 line-length = 100
@@ -73,3 +81,8 @@ ignore = [
 "docs/**" = ["DOC"]
 ".github/**" = ["DOC"]
 "src/application/**" = ["DOC"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
