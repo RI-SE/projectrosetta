@@ -95,7 +95,7 @@ def setup_esmini() -> None:
         print(f"Unzipping {output}...")
         unzip_esmini(output, OUTPUT_FOLDER)
 
-    for binary in ["esmini", "dat2csv"]:
+    for binary in ["esmini", "dat2csv", "replayer"]:
         ensure_executable(os.path.join(OUTPUT_FOLDER, "esmini-demo", "bin", binary))
 
 

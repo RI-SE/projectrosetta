@@ -68,6 +68,7 @@ class ScenarioRunner:
         self.dat_file = Path(self.log_folder) / f"{self.scenario_name}.dat"
         self.csv_file = Path(self.log_folder) / f"{self.scenario_name}.csv"
         self.xyt_dir = Path(self.log_folder) / f"{self.scenario_name}_xyt"
+        self.esmini_log_file = Path(self.log_folder) / "esmini.log"
 
         self.esmini_run_config = setup_run_config(
             self.scenario_path, self.log_folder / self.scenario_name, window=False
@@ -79,8 +80,11 @@ class ScenarioRunner:
     def run(self) -> None:
         """Run the scenario through esmini, convert the output to CSV, and then to XYT format."""
         # print(f"Running esmini with config: {self.esmini_run_config}")
-        run_esmini(self.esmini_run_config)
-
+        result = run_esmini(self.esmini_run_config, log_file=self.esmini_log_file)
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"esmini failed with exit code {result.returncode}. See log: {self.esmini_log_file}"
+            )
         run_dat2csv(self.dat_file, self.csv_file)
 
         run_csv2xyt(self.csv_file, self.xyt_dir, columns=["x", "y", "time"])

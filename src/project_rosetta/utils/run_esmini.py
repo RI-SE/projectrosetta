@@ -7,6 +7,7 @@ from project_rosetta.utils.utils import ESMINI_DEMO_DIR, CommandResult
 def run_esmini(
     config_file: Path | str,
     cwd: Path | str = ESMINI_DEMO_DIR,
+    log_file: Path | str | None = None,
 ) -> CommandResult:
     """
     Run the esmini process with the given config file.
@@ -14,6 +15,7 @@ def run_esmini(
     Args:
         config_file: Path to the esmini config file.
         cwd: Current working directory for the esmini process.
+        log_file: Optional path where esmini stdout and stderr should be written.
 
     Returns:
         CommandResult: The result of the esmini process.
@@ -23,6 +25,8 @@ def run_esmini(
         "./bin/esmini",
         "--config_file_path",
         str(config_file),
+        "--fixed_timestep",
+        "0.01",
     ]
 
     result = subprocess.run(
@@ -32,6 +36,21 @@ def run_esmini(
         text=True,
         check=False,
     )
+
+    if log_file is not None:
+        log_path = Path(log_file)
+        log_path.write_text(
+            "Command: "
+            + " ".join(command)
+            + "\n"
+            + f"Return code: {result.returncode}\n\n"
+            + "[stdout]\n"
+            + result.stdout
+            + ("\n" if result.stdout and not result.stdout.endswith("\n") else "")
+            + "\n[stderr]\n"
+            + result.stderr
+            + ("\n" if result.stderr and not result.stderr.endswith("\n") else "")
+        )
 
     return CommandResult(
         returncode=result.returncode,

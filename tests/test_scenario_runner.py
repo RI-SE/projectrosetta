@@ -46,10 +46,12 @@ def test_scenario_runner_run(
     runner.csv_file = Path("/tmp/test.csv")
     runner.xyt_dir = Path("/tmp/test_xyt")
     runner.esmini_run_config = Path("/tmp/config.yml")
+    runner.esmini_log_file = Path("/tmp/esmini.log")
+    mock_run_esmini.return_value = MagicMock(returncode=0)
 
     runner.run()
 
-    mock_run_esmini.assert_called_once_with(runner.esmini_run_config)
+    mock_run_esmini.assert_called_once_with(runner.esmini_run_config, log_file=runner.esmini_log_file)
 
     mock_run_dat2csv.assert_called_once_with(
         runner.dat_file,
@@ -61,6 +63,36 @@ def test_scenario_runner_run(
         runner.xyt_dir,
         columns=["x", "y", "time"],
     )
+
+
+@patch("project_rosetta.utils.scenario_runner.run_csv2xyt")
+@patch("project_rosetta.utils.scenario_runner.run_dat2csv")
+@patch("project_rosetta.utils.scenario_runner.run_esmini")
+def test_scenario_runner_run_raises_when_esmini_fails(
+    mock_run_esmini,
+    mock_run_dat2csv,
+    mock_run_csv2xyt,
+):
+    """Test that the ScenarioRunner stops the chain when esmini fails."""
+    runner = ScenarioRunner(Path("/tmp/test.xosc"))
+
+    runner.dat_file = Path("/tmp/test.dat")
+    runner.csv_file = Path("/tmp/test.csv")
+    runner.xyt_dir = Path("/tmp/test_xyt")
+    runner.esmini_run_config = Path("/tmp/config.yml")
+    runner.esmini_log_file = Path("/tmp/esmini.log")
+    mock_run_esmini.return_value = MagicMock(returncode=3)
+
+    try:
+        runner.run()
+    except RuntimeError as exc:
+        assert str(runner.esmini_log_file) in str(exc)
+        assert "exit code 3" in str(exc)
+    else:
+        raise AssertionError("Expected RuntimeError when esmini fails")
+
+    mock_run_dat2csv.assert_not_called()
+    mock_run_csv2xyt.assert_not_called()
 
 
 @patch("project_rosetta.utils.scenario_runner.ScenarioRunner")

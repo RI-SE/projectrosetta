@@ -41,3 +41,22 @@ def test_run_esmini(mock_run):
 
     assert result.returncode == 0
     assert result.stdout == "ok"
+
+
+@patch("project_rosetta.utils.run_esmini.subprocess.run")
+def test_run_esmini_writes_log_file(mock_run, tmp_path):
+    """Test that run_esmini persists the subprocess output when a log path is provided."""
+    mock_run.return_value = MagicMock(returncode=7, stdout="stdout text", stderr="stderr text")
+    log_file = tmp_path / "esmini.log"
+
+    run_esmini("config.yml", cwd=".", log_file=log_file)
+
+    assert log_file.exists()
+    content = log_file.read_text()
+
+    assert "Command: ./bin/esmini --config_file_path config.yml" in content
+    assert "Return code: 7" in content
+    assert "[stdout]" in content
+    assert "stdout text" in content
+    assert "[stderr]" in content
+    assert "stderr text" in content
