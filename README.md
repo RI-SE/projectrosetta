@@ -106,6 +106,10 @@ This will generate one .xyt file for each entity in the scenario. All relevant i
 
 - `poetry run abd-log2xyt <path_to_abd_log_txt> <output_directory>`
 
+## Visualize ABD log
+
+- `poetry run abd-visualize <path_to_abd_log_txt> --vehicle-info Vehicle0062.txt`
+
 ## .xyt to OpenSCENARIO
 
 - `poetry run xyt2xosc <path_to_xyt> [<path_to_xyt> ...] <output_xosc>`
