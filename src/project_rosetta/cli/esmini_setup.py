@@ -1,11 +1,14 @@
 """esmini setup for project-rosetta."""
 
+import argparse
 import os
 import shutil
 import stat
 import zipfile
 
 import requests
+from dotenv import load_dotenv
+
 
 ESMINI_RELEAVE_VERSION = "v3.0.1"
 
@@ -17,6 +20,7 @@ ESMINI_SRC = "esmini_src"
 
 ESMINI_DEMO_URL = f"https://github.com/esmini/esmini/releases/download/{ESMINI_RELEAVE_VERSION}/esmini-demo_Linux.zip"
 ESMINI_DEMO = "esmini_demo"
+
 
 OUTPUT_FOLDER = "esmini"
 
@@ -96,21 +100,89 @@ def setup_esmini() -> None:
         unzip_esmini(output, OUTPUT_FOLDER)
 
     for binary in ["esmini", "dat2csv", "replayer"]:
-        ensure_executable(os.path.join(OUTPUT_FOLDER, "esmini-demo", "bin", binary))
+        ensure_executable(os.path.join(OUTPUT_FOLDER, "bin", binary))
 
-
-def main() -> int:
+    
+def setup_esmini_local(esmini_path: str | None = None) -> None:
     """
-    Run the hello-world CLI command.
+    Set up esmini from a local installation by symlinking to the output folder.
 
+    Args:
+        esmini_path: Path to the local esmini directory containing bin/.
+                     Defaults to ESMINI_DIR environment variable.
+
+    Raises:
+        ValueError: If no local esmini path is provided or set in environment.
+        FileNotFoundError: If the local esmini path does not exist.
+
+    """
+    load_dotenv()  # loads .env from current directory
+
+    esmini_path = os.getenv("ESMINI_DIR")
+    if not esmini_path:
+        raise ValueError(
+            "No local esmini path provided. Set ESMINI_DIR environment variable or pass esmini_path."
+        )
+
+    esmini_dir = os.path.abspath(esmini_path)
+    if not os.path.isdir(esmini_dir):
+        raise FileNotFoundError(f"Local esmini directory not found: {esmini_dir}")
+
+    print(f"Setting up esmini from local path: {esmini_dir}")
+
+    if os.path.exists(OUTPUT_FOLDER):
+        shutil.rmtree(OUTPUT_FOLDER)
+
+
+    # Symlink the local esmini into the expected output structure
+    link_target = os.path.join(OUTPUT_FOLDER)
+    os.symlink(esmini_dir, link_target)
+    print(f"Created symlink: {link_target} -> {esmini_dir}")
+
+    for binary in ["esmini", "dat2csv", "replayer"]:
+        ensure_executable(os.path.join(link_target, "bin", binary))
+
+
+
+def args(argv: list[str] | None = None) -> argparse.Namespace:
+    """
+    Parse CLI arguments for esmini setup.
+
+    Args:
+        argv: Optional list of command-line arguments. If None, defaults to sys.argv.
+
+    Returns:
+        An argparse.Namespace object containing the parsed arguments.
+
+    """
+    parser = argparse.ArgumentParser(description="Set up esmini.")
+
+    parser.add_argument(
+        "--local",
+        default=False,
+        action="store_true",
+        help="Setup local esmini installation.",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """
+    Run the esmini setup CLI command.
+    If --local is specified, it will set up esmini from a local installation.
+    Otherwise, it will fetch and set up esmini-demo from GitHub releases.
+    
     Returns:
         Exit status code.
 
     """
-    print("Hello from setup esmini")
-
-    setup_esmini()
+    parsed_args = args(argv)
+    if parsed_args.local:
+        print("Setting up local esmini installation")
+        setup_esmini_local()
+    else:
+        print("Setting up esmini from GitHub release")
+        setup_esmini()
 
     print("Setup of esmini complete")
-
     return 0

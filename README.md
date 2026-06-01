@@ -55,6 +55,9 @@ Before opening a pull request, run local quality checks as described in the [Loc
 This ensures your contribution is aligned with repository linting and formatting standards before CI runs.
 
 ## Development Setup
+Install Poetry>=1.2 (if not already installed):
+
+- `pip install poetry`
 
 Set up the repository with Poetry:
 
@@ -78,11 +81,23 @@ Start with getting esmini demo version
 
 - `poetry run esmini-setup`
 
+Alternatively, to use a local esmini installation, create a .env file in the project root (see .env.example) and run:
+
+- `poetry run esmini-setup --local`
+
+
 Now you can generate .xyt files from .xosc with
 
-- `poetry run run-scenatio2xyt <path_to_scenario_xosc>`
+- `poetry run run-scenario2xyt <path_to_scenario_xosc>`
 
 This will generate one .xyt file for each entity in the scenario. All relevant information will be stored in a logs folder.
+
+You can also provide a Python scenario description (parsable by the ScenarioGeneration library) to handle multiple permutations
+
+- `poetry run run-scenatio2xyt <path_to_python_scenario>`
+from run_scenario2xyt
+
+This will generate `.xyt` files for all entities across all scenario variants.
 
 ## Guiding Principles
 
