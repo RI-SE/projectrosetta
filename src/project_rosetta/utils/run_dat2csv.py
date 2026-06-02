@@ -20,6 +20,9 @@ def run_dat2csv(
     Returns:
         CommandResult with return code, stdout, stderr.
 
+    Raises:
+        RuntimeError: If esmini dat2csv command fails after retrying without --precision.
+
     """
     command = [
         "./bin/dat2csv",
@@ -27,7 +30,7 @@ def run_dat2csv(
         "--csv",
         str(csv_file),
         "--precision",
-        "16"
+        "16",
     ]
 
     result = subprocess.run(
@@ -37,9 +40,27 @@ def run_dat2csv(
         text=True,
         check=False,
     )
+
     if result.returncode != 0:
-        print(f"dat2csv stdout: {result.stdout}")
-        raise RuntimeError(f"dat2csv failed with exit code {result.returncode}. See stderr for details.")
+        # print(f"dat2csv failed (exit {result.returncode}), retrying without --precision...")
+        command = [
+            "./bin/dat2csv",
+            str(dat_file),
+            "--csv",
+            str(csv_file),
+        ]
+        result = subprocess.run(
+            command,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"dat2csv failed with exit code {result.returncode}.\nstderr: {result.stderr}"
+        )
 
     return CommandResult(
         returncode=result.returncode,

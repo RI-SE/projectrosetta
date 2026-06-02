@@ -9,7 +9,6 @@ import zipfile
 import requests
 from dotenv import load_dotenv
 
-
 ESMINI_RELEAVE_VERSION = "v3.0.1"
 
 # Currently not used, only demo atm
@@ -46,11 +45,14 @@ def ensure_executable(path):
         print(f"Made {path} executable")
 
 
-def esmini_directory() -> None:
+def esmini_directory(mkdir: bool) -> None:
     """Ensure the output directory for esmini exists and is clean."""
-    if os.path.exists(OUTPUT_FOLDER):
+    if os.path.islink(OUTPUT_FOLDER):
+        os.remove(OUTPUT_FOLDER)
+    elif os.path.exists(OUTPUT_FOLDER):
         shutil.rmtree(OUTPUT_FOLDER)
-    os.mkdir(OUTPUT_FOLDER)
+    if mkdir:
+        os.mkdir(OUTPUT_FOLDER)
 
 
 def fetch_esmini_zip(url: str, output_path: str) -> None:
@@ -86,7 +88,7 @@ def setup_esmini() -> None:
     """Set up esmini by fetching and extracting necessary files."""
     print("Setting up esmini...")
 
-    esmini_directory()
+    esmini_directory(mkdir=True)
 
     files_to_fetch = [
         # [ESMINI_BIN_URL, ESMINI_BIN],
@@ -98,11 +100,12 @@ def setup_esmini() -> None:
         fetch_esmini_zip(url, output)
         print(f"Unzipping {output}...")
         unzip_esmini(output, OUTPUT_FOLDER)
+        os.remove(output + ".zip")
 
     for binary in ["esmini", "dat2csv", "replayer"]:
-        ensure_executable(os.path.join(OUTPUT_FOLDER, "bin", binary))
+        ensure_executable(os.path.join(OUTPUT_FOLDER, "esmini-demo", "bin", binary))
 
-    
+
 def setup_esmini_local(esmini_path: str | None = None) -> None:
     """
     Set up esmini from a local installation by symlinking to the output folder.
@@ -119,20 +122,19 @@ def setup_esmini_local(esmini_path: str | None = None) -> None:
     load_dotenv()  # loads .env from current directory
 
     esmini_path = os.getenv("ESMINI_DIR")
+    print(f"ESMINI_DIR from environment: {esmini_path}")
     if not esmini_path:
         raise ValueError(
-            "No local esmini path provided. Set ESMINI_DIR environment variable or pass esmini_path."
+            "No local esmini path provided.Set ESMINI_DIR environment variable in .env file."
         )
 
     esmini_dir = os.path.abspath(esmini_path)
-    if not os.path.isdir(esmini_dir):
+    if not os.path.isdir(esmini_dir) or not os.path.exists(esmini_dir):
         raise FileNotFoundError(f"Local esmini directory not found: {esmini_dir}")
 
     print(f"Setting up esmini from local path: {esmini_dir}")
 
-    if os.path.exists(OUTPUT_FOLDER):
-        shutil.rmtree(OUTPUT_FOLDER)
-
+    esmini_directory(mkdir=False)
 
     # Symlink the local esmini into the expected output structure
     link_target = os.path.join(OUTPUT_FOLDER)
@@ -141,7 +143,6 @@ def setup_esmini_local(esmini_path: str | None = None) -> None:
 
     for binary in ["esmini", "dat2csv", "replayer"]:
         ensure_executable(os.path.join(link_target, "bin", binary))
-
 
 
 def args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -171,7 +172,7 @@ def main(argv: list[str] | None = None) -> int:
     Run the esmini setup CLI command.
     If --local is specified, it will set up esmini from a local installation.
     Otherwise, it will fetch and set up esmini-demo from GitHub releases.
-    
+
     Returns:
         Exit status code.
 

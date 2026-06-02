@@ -55,6 +55,7 @@ Before opening a pull request, run local quality checks as described in the [Loc
 This ensures your contribution is aligned with repository linting and formatting standards before CI runs.
 
 ## Development Setup
+
 Install Poetry>=1.2 (if not already installed):
 
 - `pip install poetry`
@@ -84,7 +85,6 @@ Start with getting esmini demo version
 Alternatively, to use a local esmini installation, create a .env file in the project root (see .env.example) and run:
 
 - `poetry run esmini-setup --local`
-
 
 Now you can generate .xyt files from .xosc with
 

@@ -9,7 +9,6 @@ from project_rosetta.utils.scenario_files import (
     copy_to,
     scenario_list_handler,
 )
-
 from project_rosetta.utils.utils import LOGS_DIR
 
 
@@ -92,8 +91,7 @@ class ScenarioRunner:
             raise RuntimeError(
                 f"esmini failed with exit code {result.returncode}. See log: {self.esmini_log_file}"
             )
-        
+
         run_dat2csv(self.dat_file, self.csv_file)
 
-        
         run_csv2xyt(self.csv_file, self.xyt_dir, columns=["x", "y", "time"])
