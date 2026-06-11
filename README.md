@@ -99,6 +99,15 @@ from run_scenario2xyt
 
 This will generate `.xyt` files for all entities across all scenario variants.
 
+## Visualize an ABD log
+
+Replay logged ABD coordinates in the esmini viewer:
+
+- `poetry run abd-visualize <path_to_abd_log_txt>`
+
+This intentionally uses logged coordinates directly and draws each actor as a
+generic vehicle. It does not correct reference points or actor dimensions.
+
 ## Guiding Principles
 
 - **Open Standards First**: Prioritize ASAM OpenSCENARIO and OpenDRIVE interoperability

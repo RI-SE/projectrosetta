@@ -31,6 +31,7 @@ esmini-setup = "project_rosetta.cli.esmini_setup:main"
 run-scenario2xyt = "project_rosetta.cli.scenario2xyt:main"
 plot-path-metrics = "project_rosetta.cli.plot_path_metrics:main"
 plot-xyt-metrics = "project_rosetta.cli.plot_xyt_metrics:main"
+abd-visualize = "project_rosetta.cli.abd_visualize:main"
 
 [tool.ruff]
 line-length = 100
